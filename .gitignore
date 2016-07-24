@@ -1,0 +1,64 @@
+# ----------------------------------
+# System
+
+.env
+.env-*
+npm-debug.log
+
+.DS_Store
+.DS_Store?
+._*
+.Trashes
+Thumbs.db
+.DS_Store
+.DS_Store?
+ehthumbs.db
+.Spotlight-V100
+*.pyc
+
+
+# ----------------------------------
+# Sources
+
+libs
+node_modules
+bower_components
+
+!dist/js/jcdecaux.min.js
+!dist/css/jcdecaux.min.css
+
+dev
+libs
+temp
+dist/js
+dist/css
+dist/js/*.*
+dist/css/*.*
+dist/js/livemap.min.js
+dist/js/ufe.min.js
+dist/icomoon
+src/vendor
+
+
+!dist/js/jcdecaux.min.js
+!dist/css/jcdecaux.min.css
+
+
+# ----------------------------------
+# Tests
+
+tests/reports
+tests/reports/**/*.*
+tests/coverage
+tests/coverage/**/*.*
+
+# ################################
+#
+# users
+#
+# ################################
+.imdone
+.jshintrc
+
+# CORS enabled
+.htaccess
