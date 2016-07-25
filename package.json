@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "eslint './tests/**/*.js' -f src/graph.js"
+    "start": "eslint './tests/**/*.js' -f ./index.js -o reports/eslint-graph-report.html"
   },
   "repository": {
     "type": "git",
@@ -18,17 +18,12 @@
   },
   "homepage": "https://github.com/sixertoy/eslint-graph-reporter#readme",
   "devDependencies": {
-    "babel-core": "^6.11.4",
     "babel-eslint": "^6.1.2",
-    "babel-loader": "^6.2.4",
-    "babel-plugin-react-transform": "^2.0.2",
-    "babel-preset-react": "^6.11.1",
-    "babel-preset-react-hmre": "^1.1.1",
-    "eslint": "^3.1.1",
-    "eslint-plugin-react": "^5.2.2",
-    "webpack": "^1.13.1"
+    "eslint": "3.1.1",
+    "eslint-plugin-react": "5.2.2"
   },
   "dependencies": {
-    "lodash": "^4.13.1"
+    "fs-extra": "0.30.0",
+    "lodash": "4.13.1"
   }
 }

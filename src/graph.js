@@ -1,4 +1,4 @@
-/* global module, require, __dirname */
+/* global module, require, __dirname, process */
 
 /**
  *
@@ -10,31 +10,103 @@
     'use strict';
 
     var fs = require('fs'),
+        cwd = process.cwd(),
         path = require('path'),
-        lodash = require('lodash');
+        fse = require('fs-extra'),
+        lodash = require('lodash'),
+        itemTemplate = 'html-graph-item',
+        reportTemplate = 'html-graph-report',
+        htmlFormatter = require('./../../eslint/formatters/html');
 
-        /* ------------------------------------------------------------------------------
+    /* ----------------------------------------------
 
-        Helpers
+    Helpers
 
-        ------------------------------------------------------------------------------ */
+    ---------------------------------------------- */
 
-        /*
-        pageTemplate = 'html-template-page.html',
-        resultTemplate = 'html-template-result.html',
-        messageTemplate = 'html-template-message.html';
-
-    function _loadTemplate (filename) {
-        var tpl = path.join(__dirname, filename);
+    /**
+     *
+     * Load eslint graph plugin HTML template
+     *
+     */
+    function _loadHTMLTemplate (filename) {
+        var tpl = path.join(__dirname, filename + '.html');
         tpl = fs.readFileSync(tpl, 'utf-8');
         tpl = lodash.template(tpl);
         return tpl;
     }
 
-    pageTemplate = _loadTemplate(pageTemplate);
-    resultTemplate = _loadTemplate(resultTemplate);
-    messageTemplate = _loadTemplate(messageTemplate);
-    */
+    /**
+     *
+     * Return a zero month padded
+     *
+     */
+    function _getPadMonth (date) {
+        var month = (date.getMonth() + 1);
+        month = (month < 10) ? '0' + month : month;
+        return String(month);
+    }
+
+    /**
+     *
+     * Calculate max percent for graphs
+     * Combinate errors and warnings for each report in stats file
+     *
+     */
+    function _getMaxErrors (stats) {
+        var count,
+            max = 0;
+        lodash.map(stats, function(obj) {
+            count = obj.warnings + obj.errors;
+            if (count > max) {
+                max = count;
+            }
+        });
+        return max;
+    }
+
+    /**
+     *
+     * Write stats file in reports folder
+     *
+     */
+    function _writeStatsFile (stats, filename) {
+        var file = path.join(cwd, 'reports', filename);
+        fse.writeJsonSync(file, stats, {
+            spaces: 2
+        });
+    }
+
+    /**
+     *
+     * Load stats file in reports folder
+     *
+     */
+    function _loadStatsFile (filename) {
+        var stats = {},
+            file = path.join(cwd, 'reports', filename);
+        try {
+            stats = fse.readJsonSync(file);
+
+        } catch (e) {
+            _writeStatsFile(stats, filename);
+
+        }
+        return stats;
+    }
+
+    function _reverseGraphs (graphs) {
+        var keys = Object.keys(graphs);
+        console.log('keys', keys);
+        keys = keys.reverse();
+        console.log('keys', keys);
+    }
+
+    /* ----------------------------------------------
+
+    Templates
+
+    ---------------------------------------------- */
 
     /**
      * Given a word and a count, append an s if count is not one.
@@ -49,121 +121,75 @@
     */
 
     /**
-     * Renders text along the template of x problems (x errors, x warnings)
-     * @param {string} totalErrors Total errors
-     * @param {string} totalWarnings Total warnings
-     * @returns {string} The formatted string, pluralized where necessary
-     */
-    /*
-    function renderSummary (totalErrors, totalWarnings) {
-        var totalProblems = totalErrors + totalWarnings;
-        var renderedText = totalProblems + ' ' + pluralize('problem', totalProblems);
-
-        if (totalProblems !== 0) {
-            renderedText += ' (' + totalErrors + ' ' + pluralize('error', totalErrors) + ', ' + totalWarnings + ' ' + pluralize('warning', totalWarnings) + ')';
-        }
-        return renderedText;
-    }
-    */
-
-    /**
-     * Get the color based on whether there are errors/warnings...
-     * @param {string} totalErrors Total errors
-     * @param {string} totalWarnings Total warnings
-     * @returns {int} The color code (0 = green, 1 = yellow, 2 = red)
-     */
-    /*
-    function renderColor (totalErrors, totalWarnings) {
-        if (totalErrors !== 0) {
-            return 2;
-        } else if (totalWarnings !== 0) {
-            return 1;
-        }
-        return 0;
-    }
-    */
-
-    /**
-     * Get HTML (table rows) describing the messages.
-     * @param {Array} messages Messages.
-     * @param {int} parentIndex Index of the parent HTML row.
-     * @returns {string} HTML (table rows) describing the messages.
-     */
-    /*
-    function renderMessages (messages, parentIndex) {
-
-        // Get HTML (table row) describing a message.
-        // @param {Object} message Message.
-        // @returns {string} HTML (table row) describing a message.
-        return lodash.map(messages, function(message) {
-                var lineNumber,
-                    columnNumber;
-
-                lineNumber = message.line || 0;
-                columnNumber = message.column || 0;
-
-                return messageTemplate({
-                    parentIndex: parentIndex,
-                    lineNumber: lineNumber,
-                    columnNumber: columnNumber,
-                    severityNumber: message.severity,
-                    severityName: message.severity === 1 ? 'Warning' : 'Error',
-                    message: message.message,
-                    ruleId: message.ruleId
-                });
-            })
-            .join('\n');
-    }
-    */
-
-    /**
      * @param {Array} results Test results.
      * @returns {string} HTML string describing the results.
      */
-    /*
-    function renderResults (results) {
-        return lodash.map(results, function(result, index) {
-                return resultTemplate({
-                    index: index,
-                    color: renderColor(result.errorCount, result.warningCount),
-                    filePath: result.filePath,
-                    summary: renderSummary(result.errorCount, result.warningCount)
-
-                }) + renderMessages(result.messages, index);
-            })
-            .join('\n');
+    function _renderResults (stats, max) {
+        var left, percent, count,
+            index = 0,
+            width = 60,
+            template = _loadHTMLTemplate(itemTemplate);
+        return lodash.map(stats, function(obj) {
+            left = (width * index);
+            count = obj.warnings + obj.errors;
+            percent = ((100 * count) / max);
+            index++;
+            return template({
+                left: left,
+                top: 100 - percent,
+                errors: obj.errors,
+                warnings: obj.warnings,
+                errorsPercent: ((100 * obj.errors) / count),
+                warningsPercent: ((100 * obj.warnings) / count)
+            });
+        })
+        .join('\n');
     }
-    */
 
-    /* ------------------------------------------------------------------------------
+    /* ----------------------------------------------
 
     Public Interface
 
-    ------------------------------------------------------------------------------ */
+    ---------------------------------------------- */
 
-    module.exports = function(results) {
-        var totalErrors,
-            totalWarnings;
+    function eslintGraphReporter (results) {
+        var reportKey, data, output, template, max, graphs,
+            date = new Date(),
+            json = 'eslint-graph.json',
+            stats = _loadStatsFile(json);
 
-        totalErrors = 0;
-        totalWarnings = 0;
+        reportKey = String(date.getFullYear()) + _getPadMonth(date);
+        reportKey += String(date.getDate()) + String(date.getHours());
+        reportKey += String(date.getMinutes()) + String(date.getSeconds());
 
-        // Iterate over results to get totals
+        // write current report
+        data = {
+            errors: 0,
+            warnings: 0
+        };
         results.forEach(function(result) {
-            totalErrors += result.errorCount;
-            totalWarnings += result.warningCount;
+            data.errors += result.errorCount;
+            data.warnings += result.warningCount;
         });
+        stats[reportKey] = data;
+        _writeStatsFile(stats, json);
 
-        return [totalErrors, totalWarnings];
+        // max errors for percentage
+        max = _getMaxErrors(stats);
 
-        /*
-        return pageTemplate({
+        // load template
+        template = _loadHTMLTemplate(reportTemplate);
+        graphs = _renderResults(stats, max);
+        output = template({
             date: new Date(),
-            reportColor: renderColor(totalErrors, totalWarnings),
-            reportSummary: renderSummary(totalErrors, totalWarnings),
-            results: renderResults(results)
+            results: graphs
         });
-        */
 
-    };
+        console.log(htmlFormatter);
+
+        return results;
+    }
+
+    module.exports = eslintGraphReporter;
+
 }());

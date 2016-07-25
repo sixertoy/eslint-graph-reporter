@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<head>
+    <title>ESLint Report</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            color: #333 font-size: 16px;
+            font-weight: normal;
+            padding: 0;
+            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+        }
+
+        #overview {
+            padding: 20px 30px
+        }
+
+        #graph-holder,
+        #graph-container {
+            height: 400px;
+        }
+
+        #graph-container {
+            overflow: hidden;
+            overflow-x: scroll;
+        }
+
+        #graph-holder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            /* background: #EEE; */
+            position: relative;
+            justify-content: flex-start;
+        }
+
+        .graph-item {
+            top: 0;
+            left: 0;
+            width: 60px;
+            height: 100%;
+            padding-right: 5px;
+            position: absolute;
+        }
+
+        .errors,
+        .warnings {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .errors {
+            background: #b94a48;
+        }
+
+        .warnings {
+            background: #f0ad4e;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="overview">
+        <h1>ESLint Graph Report</h1>
+        <!--
+        <div>
+            <span><%= reportSummary %></span> - Generated on <%= date %>
+        </div>
+        -->
+        <div style="background:#EEE;width:200px">
+
+            <div id="graph-container">
+                <div id="graph-holder">
+                    <!-- graph item -->
+                    <div class="graph-item" style="top:55%;left:0;">
+                        <div style="height:5%;" class="warnings"></div>
+                        <div style="height:40%;" class="errors"></div>
+                    </div>
+                    <!-- graph item -->
+                    <div class="graph-item" style="top:40%;left:60px;">
+                        <div style="height:40%;" class="warnings"></div>
+                        <div style="height:20%;" class="errors"></div>
+                    </div>
+                    <!-- graph item -->
+                    <div class="graph-item" style="top:50%;left:120px;">
+                        <div style="height:40%;" class="warnings"></div>
+                        <div style="height:10%;" class="errors"></div>
+                    </div>
+                    <!-- graph item -->
+                    <div class="graph-item" style="top:55%;left:180px;">
+                        <div style="height:5%;" class="warnings"></div>
+                        <div style="height:40%;" class="errors"></div>
+                    </div>
+                    <!-- graph item -->
+                    <div class="graph-item" style="top:40%;left:240px;">
+                        <div style="height:40%;" class="warnings"></div>
+                        <div style="height:20%;" class="errors"></div>
+                    </div>
+                    <!-- graph item -->
+                    <div class="graph-item" style="top:50%;left:300px;">
+                        <div style="height:40%;" class="warnings"></div>
+                        <div style="height:10%;" class="errors"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

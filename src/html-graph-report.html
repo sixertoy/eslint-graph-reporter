@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<head>
+    <title>ESLint Report</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-weight: normal;
+            color: #333 font-size: 16px;
+            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+        }
+
+        #graph-container {
+          height: 400px;
+          overflow: hidden;
+          padding-top: 80px;
+          overflow-x: scroll;
+        }
+
+        #graph-holder {
+          height: 100%;
+          display: flex;
+          background: #EEE;
+          position: relative;
+          justify-content: flex-start;
+        }
+
+        .graph-item {
+          top: 0;
+          left: 0;
+          width: 60px;
+          height: 100%;
+          padding-right: 5px;
+          position: absolute;
+        }
+
+        .errors,
+        .warnings {
+          width: 100%;
+          display: block;
+        }
+        .errors {
+          background: #b94a48;
+        }
+        .warnings {
+          background: #f0ad4e;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="overview" style="padding: 20px 30px;">
+        <h1>ESLint Graph Report</h1>
+        <div>
+          <span>Generated on <%= date %></span>
+        </div>
+        <div style="background:#EEE;">
+          <div id="graph-container">
+            <div id="graph-holder">
+              <!-- items -->
+              <%= results %>
+            </div>
+          </div>
+        </div>
+    </div>
+</body>
+
+</html>
