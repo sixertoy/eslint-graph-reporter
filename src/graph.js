@@ -15,8 +15,7 @@
         fse = require('fs-extra'),
         lodash = require('lodash'),
         itemTemplate = 'html-graph-item',
-        reportTemplate = 'html-graph-report',
-        htmlFormatter = require('./../../eslint/formatters/html');
+        reportTemplate = 'html-graph-report';
 
     /* ----------------------------------------------
 
@@ -95,12 +94,14 @@
         return stats;
     }
 
+    /*
     function _reverseGraphs (graphs) {
         var keys = Object.keys(graphs);
         console.log('keys', keys);
         keys = keys.reverse();
         console.log('keys', keys);
     }
+    */
 
     /* ----------------------------------------------
 
@@ -184,10 +185,7 @@
             date: new Date(),
             results: graphs
         });
-
-        console.log(htmlFormatter);
-
-        return results;
+        return output;
     }
 
     module.exports = eslintGraphReporter;
