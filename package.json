@@ -7,6 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "eslint './tests/**/*.js' -f ./index.js -o reports/eslint-graph-report.html"
   },
+  "bin": {
+    "eslint-graph-reporter": ".bin/eslint-graph-reporter"
+  },
+  "files": [
+    "src/*",
+    ".bin/*",
+    "index.js",
+    "README.md",
+    "package.json"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sixertoy/eslint-graph-reporter.git"
