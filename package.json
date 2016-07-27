@@ -7,11 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "eslint './tests/**/*.js' -f ./index.js -o reports/eslint-graph-report.html"
   },
-  "bin": {
-    "eslint-graph-reporter": ".bin/eslint-graph-reporter"
-  },
   "files": [
-    ".bin/*",
     "index.js",
     "README.md",
     "package.json",

@@ -1,3 +1,9 @@
 #!/usr/bin/env node
 
-require('./../eslint-graph-reporter/index');
+(function() {
+
+    'use strict';
+
+    module.exports = require('./../eslint-graph-reporter/index');
+
+  }());

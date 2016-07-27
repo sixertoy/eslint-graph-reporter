@@ -185,7 +185,7 @@
             date: new Date(),
             results: graphs
         });
-        return output;
+        process.exit(0);
     }
 
     module.exports = eslintGraphReporter;
