@@ -3,6 +3,6 @@
 
     'use strict';
 
-    module.exports = require('./src/graph.js');
+    module.exports = require('./eslint-graph-reporter/graph.js');
 
 }());

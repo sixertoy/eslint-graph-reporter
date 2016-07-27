@@ -11,11 +11,11 @@
     "eslint-graph-reporter": ".bin/eslint-graph-reporter"
   },
   "files": [
-    "src/*",
     ".bin/*",
     "index.js",
     "README.md",
-    "package.json"
+    "package.json",
+    "eslint-graph-reporter/*.*"
   ],
   "repository": {
     "type": "git",
