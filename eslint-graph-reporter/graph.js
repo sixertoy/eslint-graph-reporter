@@ -40,6 +40,30 @@
      * Return a zero month padded
      *
      */
+    function _getPadDay (date) {
+        var day = date.getDate();
+        day = (day < 10) ? '0' + day : day;
+        return String(day);
+    }
+
+    function _getPadHours (date) {
+        var hours = date.getHours();
+        hours = (hours < 10) ? '0' + hours : hours;
+        return String(hours);
+    }
+
+    function _getPadSeconds (date) {
+        var seconds = date.getSeconds();
+        seconds = (seconds < 10) ? '0' + seconds : seconds;
+        return String(seconds);
+    }
+
+    function _getPadMinutes (date) {
+        var mins = date.getSeconds();
+        mins = (mins < 10) ? '0' + mins : mins;
+        return String(mins);
+    }
+
     function _getPadMonth (date) {
         var month = (date.getMonth() + 1);
         month = (month < 10) ? '0' + month : month;
@@ -160,8 +184,8 @@
             stats = _loadStatsFile(json);
 
         reportKey = String(date.getFullYear()) + _getPadMonth(date);
-        reportKey += String(date.getDate()) + String(date.getHours());
-        reportKey += String(date.getMinutes()) + String(date.getSeconds());
+        reportKey += _getPadDay(date) + '_' + _getPadHours(date);
+        reportKey += _getPadMinutes(date) + _getPadSeconds(date);
 
         // write current report
         data = {
@@ -185,7 +209,7 @@
             date: new Date(),
             results: graphs
         });
-        process.exit(0);
+        return output;
     }
 
     module.exports = eslintGraphReporter;
